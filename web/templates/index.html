@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 SpellTutor - Learn Spelling Fun!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Fun and interactive spelling tutor for kids! Learn English spelling with games, challenges, and colorful animations.">
+<meta name="keywords" content="spelling, learning, kids, education, games">
+<meta name="author" content="SpellTutor">
+<meta property="og:title" content="SpellTutor - Learn Spelling Fun!">
+<meta property="og:description" content="Interactive spelling games for kids">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen active">
+        <div class="container">
+            <h1 class="title bounce">🎓 SpellTutor</h1>
+            <p class="subtitle">Learn spelling the fun way!</p>
+            
+            <div class="welcome-form">
+                <input type="text" id="playerName" placeholder="Enter your name" maxlength="20">
+                <input type="number" id="playerAge" placeholder="Enter your age" min="5" max="15">
+                <button class="btn btn-primary btn-large" onclick="startGame()">
+                    🚀 Start Learning!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Menu -->
+    <div id="menuScreen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2>Welcome, <span id="displayName">Friend</span>! 👋</h2>
+                <div class="score-display">
+                    <span class="score-label">Score:</span>
+                    <span id="totalScore" class="score-value">0</span> ⭐
+                </div>
+            </div>
+
+            <div class="game-modes">
+                <div class="mode-card" onclick="selectMode('jumbled')">
+                    <div class="mode-icon">🔀</div>
+                    <h3>Jumbled Words</h3>
+                    <p>Unscramble the letters!</p>
+                </div>
+
+                <div class="mode-card" onclick="selectMode('spelling')">
+                    <div class="mode-icon">✏️</div>
+                    <h3>Spell It Right</h3>
+                    <p>Type the correct spelling!</p>
+                </div>
+
+                <div class="mode-card" onclick="selectMode('letter')">
+                    <div class="mode-icon">🔤</div>
+                    <h3>Letter Hunt</h3>
+                    <p>Find words by letter!</p>
+                </div>
+            </div>
+
+            <div class="difficulty-selector">
+                <h3>Choose Difficulty:</h3>
+                <div class="difficulty-buttons">
+                    <button class="btn btn-easy" onclick="selectDifficulty('easy')">😊 Easy</button>
+                    <button class="btn btn-medium" onclick="selectDifficulty('medium')">🤔 Medium</button>
+                    <button class="btn btn-hard" onclick="selectDifficulty('hard')">🔥 Hard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+        <div class="container">
+            <div class="game-header">
+                <button class="btn btn-small" onclick="backToMenu()">⬅️ Back</button>
+                <div class="game-stats">
+                    <span class="stat">Score: <strong id="gameScore">0</strong></span>
+                    <span class="stat">Streak: <strong id="streak">0</strong> 🔥</span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div id="questionArea" class="question-area">
+                    <div class="emoji-display" id="emojiDisplay">🎯</div>
+                    <div class="question-text" id="questionText">Loading...</div>
+                    <div class="hint-text" id="hintText"></div>
+                </div>
+
+                <div class="answer-area">
+                    <input type="text" id="answerInput" placeholder="Type your answer..." autocomplete="off">
+                    <button class="btn btn-primary btn-large" onclick="submitAnswer()">
+                        ✅ Submit
+                    </button>
+                    <button class="btn btn-secondary" onclick="skipQuestion()">
+                        ⏭️ Skip
+                    </button>
+                </div>
+
+                <div id="feedback" class="feedback hidden"></div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="screen">
+        <div class="container">
+            <div class="results-content">
+                <h1 class="results-title">🎉 Great Job!</h1>
+                <div class="final-score">
+                    <div class="score-circle">
+                        <span id="finalScore">0</span>
+                        <small>points</small>
+                    </div>
+                </div>
+                
+                <div class="achievement-stars" id="achievementStars">
+                    ⭐⭐⭐
+                </div>
+
+                <div class="results-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="correctCount">0</span>
+                        <span class="stat-label">Correct</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="incorrectCount">0</span>
+                        <span class="stat-label">Wrong</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="bestStreak">0</span>
+                        <span class="stat-label">Best Streak</span>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn btn-primary btn-large" onclick="playAgain()">
+                        🔄 Play Again
+                    </button>
+                    <button class="btn btn-secondary" onclick="backToMenu()">
+                        🏠 Main Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>
