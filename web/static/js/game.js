@@ -289,7 +289,7 @@ function showResults() {
     
     showScreen('resultsScreen');
     playSound('complete');
-    celebrate();// In showFeedback function, add this line when correct:
+    celebrate();
 if (isCorrect) {
     feedbackEl.classList.add('correct');
     feedbackEl.innerHTML = `🎉 Excellent! That's correct! <br><strong>${correctAnswer}</strong>`;
